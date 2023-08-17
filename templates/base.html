@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinematic components Catalog</title>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="{{url_for('static', filename='js/socketio.js')}}"></script>
+</head>
+
+<body>
+    <div style="margin-top: 50px;" class="ui container">
+        <h1 class="ui center aligned header">Kinematic components Catalog</h1>
+
+        <div id="component_add">
+            {% for component in component_list %}
+            <div class="ui segment">
+                <p class="ui big header">{{ component.name }} | {{ component.package }} | {{ component.category }}</p>
+
+                <a class="ui green button" href="/components/{{ component.category }}/{{ component.id }}">Details</a>
+                <a class="ui red button" href="/delete/{{ component.id }}">Delete</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
