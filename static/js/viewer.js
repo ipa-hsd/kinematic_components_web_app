@@ -80,7 +80,8 @@ function getLink(links, linkName) {
     return undefined
 }
 
-function viewComponent(model, repo, raw_file_url, version, package) {
+function viewComponent(model, repo, branch, version, package, package_path) {
+    console.log(package_path)
     let repoPath = repo + '/'
     repoPath = repoPath.replace('github', 'raw.githubusercontent')
 

@@ -36,6 +36,13 @@ def get_components_all():
     return db.session.query(Component).all()
 
 
+# this is ideally come from ament
+def get_package_share_directory(package_name):
+    path = '/moveit_ws/install/' + package_name + '/share/'
+    print(path)
+    return path
+
+
 @app.get("/")
 def home():
     component_list = get_components_all()
@@ -119,7 +126,10 @@ def handle_message(msg):
     component_id = msg['data'].split('/')[-1]
     component = db.session.query(Component).filter(
         Component.id == component_id).first()
-    emit('viz model', [component.model, component.repo, component.raw_file_url, component.version, component.package,
+
+    package_path = get_package_share_directory()
+
+    emit('viz model', [component.model, component.repo, component.branch, component.version, component.package, package_path,
          component_id], namespace='/viz', broadcast=True)
 
 
