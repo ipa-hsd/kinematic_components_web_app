@@ -49,22 +49,25 @@ def add():
 
     dot_trees = json.loads(request.form["dot_trees"])
 
-    print(data)
-
     robot_name = ''
-    if len(data['name']) == 0:
+    if data['name'] == '':
         robot_name = 'component'
+    else:
+       robot_name = data['name']
 
     image_files = ''
     for name, tree in dot_trees.items():
         root = dict_to_tree(tree)
 
-        filepath = 'static/images/' + data['gitRepo']['package'] + '/' + robot_name + '/'
+        filepath = 'static/images/' + data['gitRepo']['package']
+        if not filepath.endswith('/'):
+            filepath+= '/'
+        filepath += robot_name + '/'
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
-        dot = tree_to_dot(root)
+        dot_file = tree_to_dot(root)
         image_path = filepath + name + '.png'
-        dot.write_png(image_path)
+        dot_file.write_png(image_path)
 
         image_files += '/' + image_path + ';'
 
