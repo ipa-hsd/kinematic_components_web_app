@@ -53,7 +53,7 @@ def add():
     if data['name'] == '':
         robot_name = 'component'
     else:
-       robot_name = data['name']
+        robot_name = data['name']
 
     image_files = ''
     for name, tree in dot_trees.items():
@@ -61,7 +61,7 @@ def add():
 
         filepath = 'static/images/' + data['gitRepo']['package']
         if not filepath.endswith('/'):
-            filepath+= '/'
+            filepath += '/'
         filepath += robot_name + '/'
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
