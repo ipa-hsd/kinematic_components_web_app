@@ -81,7 +81,6 @@ function getLink(links, linkName) {
 }
 
 function viewComponent(model, repo, branch, version, package, package_path) {
-    console.log(package_path)
     let ws_path = '/moveit2_ws/install/'
 
     let parent = undefined;
@@ -121,12 +120,6 @@ function viewComponent(model, repo, branch, version, package, package_path) {
         childLink = getLink(model.robot.link, joint.child.link)
         if (childLink.visual !== undefined) {
             let meshPath = package + '/' + version + '/' + childLink.visual.geometry.mesh.filename.split('ur_description').slice(-1)
-            // let meshPath = 'https://raw.githubusercontent.com/UniversalRobots/Universal_Robots_ROS2_Description/humble/meshes'
-            console.log(joint.name)
-            console.log(joint.origin)
-            console.log(meshPath)
-            console.log(childLink.visual.geometry.mesh.filename.split('ur_description').slice(-1))
-            console.log(package)
             mesh = addMesh(meshPath, repoPath, getThreePose(joint.origin));
             mesh.add(axes);
             parent.add(mesh);
