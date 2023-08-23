@@ -82,11 +82,10 @@ function getLink(links, linkName) {
 
 function viewComponent(model, repo, branch, version, package, package_path) {
     console.log(package_path)
-    let repoPath = repo + '/'
-    repoPath = repoPath.replace('github', 'raw.githubusercontent')
+    let ws_path = '/moveit2_ws/install/'
 
     let parent = undefined;
-    let joint = model.robot.joint[0]
+    let joint = model.joint[0]
     let parent_link_name = joint.parent.link
     let parent_link = getLink(model.robot.link, parent_link_name)
 
