@@ -66,7 +66,7 @@ def add():
     for name, tree in dot_trees.items():
         root = dict_to_tree(tree)
 
-        filepath = 'static/images/' + data['gitRepo']['package']
+        filepath = 'kinematic_components_web_app/static/images/' + data['gitRepo']['package']
         if not filepath.endswith('/'):
             filepath += '/'
         filepath += robot_name + '/'
