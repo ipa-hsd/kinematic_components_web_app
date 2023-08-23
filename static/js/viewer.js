@@ -86,7 +86,7 @@ function viewComponent(model, repo, branch, version, package, package_path) {
     let parent = undefined;
     let joint = model.joint[0]
     let parent_link_name = joint.parent.link
-    let parent_link = getLink(model.robot.link, parent_link_name)
+    let parent_link = getLink(model.link, parent_link_name)
 
     if (parent == undefined) {
         let axes = new ROS3D.Axes({});
@@ -106,21 +106,22 @@ function viewComponent(model, repo, branch, version, package, package_path) {
         });
 
         // remove 'package://', 'filepath://', etc
-        meshPath = package + '/' + version + '/' + parent_link.visual.geometry.mesh.filename.split('ur_description').slice(-1)
+        meshPath = package + '/share/' + parent_link.visual.geometry.mesh.filename
         console.log(meshPath)
-        parent = addMesh(meshPath, repoPath, origin);
+        parent = addMesh(meshPath, ws_path, origin);
         let axes = new ROS3D.Axes({});
         parent.add(axes);
         viewer.addObject(parent);
     }
 
-    let joints = model.robot.joint
+    let joints = model.joint
     for (joint of joints) {
         let axes = new ROS3D.Axes({});
-        childLink = getLink(model.robot.link, joint.child.link)
+        childLink = getLink(model.link, joint.child.link)
         if (childLink.visual !== undefined) {
-            let meshPath = package + '/' + version + '/' + childLink.visual.geometry.mesh.filename.split('ur_description').slice(-1)
-            mesh = addMesh(meshPath, repoPath, getThreePose(joint.origin));
+            meshPath = package + '/share/' + childLink.visual.geometry.mesh.filename
+            console.log(meshPath)
+            mesh = addMesh(meshPath, ws_path, getThreePose(joint.origin));
             mesh.add(axes);
             parent.add(mesh);
             parent = mesh;
