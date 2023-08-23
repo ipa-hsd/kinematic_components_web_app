@@ -81,7 +81,7 @@ function getLink(links, linkName) {
 }
 
 function viewComponent(model, repo, branch, version, package, package_path) {
-    let ws_path = '/moveit2_ws/install/'
+    let ws_path = '/static/moveit2_ws/install/'
 
     let parent = undefined;
     let joint = model.joint[0]
@@ -106,8 +106,7 @@ function viewComponent(model, repo, branch, version, package, package_path) {
         });
 
         // remove 'package://', 'filepath://', etc
-        meshPath = package + '/share/' + parent_link.visual.geometry.mesh.filename
-        console.log(meshPath)
+        meshPath = package + '/share/' + parent_link.visual.geometry.mesh.filename.replace('package://', '')
         parent = addMesh(meshPath, ws_path, origin);
         let axes = new ROS3D.Axes({});
         parent.add(axes);
@@ -119,8 +118,7 @@ function viewComponent(model, repo, branch, version, package, package_path) {
         let axes = new ROS3D.Axes({});
         childLink = getLink(model.link, joint.child.link)
         if (childLink.visual !== undefined) {
-            meshPath = package + '/share/' + childLink.visual.geometry.mesh.filename
-            console.log(meshPath)
+            meshPath = package + '/share/' + childLink.visual.geometry.mesh.filename.replace('package://', '')
             mesh = addMesh(meshPath, ws_path, getThreePose(joint.origin));
             mesh.add(axes);
             parent.add(mesh);
