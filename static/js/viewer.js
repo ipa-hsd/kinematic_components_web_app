@@ -121,6 +121,9 @@ function viewComponent(model, repo, branch, version, package, package_path) {
             meshPath = package + '/share/' + childLink.visual.geometry.mesh.filename.replace('package://', '')
             mesh = addMesh(meshPath, ws_path, getThreePose(joint.origin));
             mesh.add(axes);
+            if (childLink.visual.geometry.mesh.scale !== undefined) {
+                mesh.scale.set(childLink.visual.geometry.mesh.scale);
+            }
             parent.add(mesh);
             parent = mesh;
         } else {
