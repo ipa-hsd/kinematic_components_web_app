@@ -67,14 +67,14 @@ def add():
     for name, tree in dot_trees.items():
         root = dict_to_tree(tree)
 
-        filepath = 'kinematic_components_web_app/static/images/' + data['gitRepo']['package']
+        filepath = '/static/images/' + data['gitRepo']['package']
         if not filepath.endswith('/'):
             filepath += '/'
         filepath += robot_name + '/'
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         dot_file = tree_to_dot(root)
-        image_path += '.png'
+        image_path = filepath + name + '.png'
         dot_file.write_png(image_path)
 
         image_files += '/' + image_path + ';'
