@@ -10,14 +10,14 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-
+    <link re ="stylesheet" href="../static/styles/style.css">
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script src="{{url_for('static', filename='js/socketio.js')}}"></script>
 </head>
 
 <body>
-    <div style="margin-top: 50px;" class="ui container">
-        <h1 class="ui center aligned header">Kinematic components Catalog</h1>
+    <div class="container">
+        <h1>Kinematic components Catalog</h1>
 
         <div id="component_add">
             {% for component in component_list %}

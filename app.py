@@ -74,7 +74,7 @@ def add():
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         dot_file = tree_to_dot(root)
-        image_path = filepath + name + '.png'
+        image_path += '.png'
         dot_file.write_png(image_path)
 
         image_files += '/' + image_path + ';'
