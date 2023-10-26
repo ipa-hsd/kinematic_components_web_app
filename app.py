@@ -108,7 +108,9 @@ def components(component_cat, component_id):
         Component.id == component_id).first()
 
     image_files = component.image_file.split(';')[:-1]
-    json_trees = json.loads(component.json_trees)
+    # a temporary fix for styling the page. Will be changed after the fix in db
+    initial_directory = '/kinematic_components_web_app'
+    image_files = [image.replace(initial_directory, '', 1) for image in image_files]
 
     return render_template("component.html", component=component, image_files=image_files)
 
