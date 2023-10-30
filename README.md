@@ -1,4 +1,12 @@
 # kinematic_components_web_app
+
+Clone this repo using ssh:
+
+```
+git clone your_ssh_link
+
+```
+
 ## Setup:
 1. create a virtual python environment using the command: 
 
