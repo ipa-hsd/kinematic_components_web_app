@@ -27,6 +27,7 @@ class Component(db.Model):
     version = db.Column(db.String(100))
     image_file = db.Column(db.String(500))
     model = db.Column(db.JSON())
+    json_trees = db.Column(db.String(1000))
 
 
 with app.app_context():
@@ -64,6 +65,7 @@ def add():
         robot_name = data['name']
 
     image_files = ''
+    json_trees = []
     for name, tree in dot_trees.items():
         root = dict_to_tree(tree)
 
@@ -79,7 +81,10 @@ def add():
 
         image_files += '/' + image_path + ';'
 
+        json_trees.append(tree)
+
     # model = json.loads(request.form["model"])
+    valid_json_string = str(json_trees).replace("'", "\"")
 
     component = Component(id=data['id'], name=data['name'],
                           category=data['category'],
@@ -88,7 +93,8 @@ def add():
                           package=data['gitRepo']['package'],
                           version=data['gitRepo']['version'],
                           image_file=image_files,
-                          model=data)
+                          model=data,
+                          json_trees=valid_json_string)
 
     db.session.add(component)
     db.session.commit()
@@ -102,6 +108,7 @@ def components(component_cat, component_id):
         Component.id == component_id).first()
 
     image_files = component.image_file.split(';')[:-1]
+    json_trees = json.loads(component.json_trees)
 
     return render_template("component.html", component=component, image_files=image_files)
 
@@ -126,22 +133,29 @@ def handle_message(msg):
     component = db.session.query(Component).filter(
         Component.id == component_id).first()
 
-    package_path = get_package_share_directory(component.package)
+    try:
+        package_path = get_package_share_directory(component.package)
 
-    emit('viz model', [component.model, component.repo, component.branch, component.version, component.package, package_path,
-         component_id], namespace='/viz', broadcast=True)
+        emit('viz model', [component.model, component.repo, component.branch, component.version, component.package, package_path,
+            component_id], namespace='/viz', broadcast=True)
+    except Exception as e:
+        print(str(e))
 
 
 @socketio.on('get mesh', namespace='/component_view')
 def get_mesh_path(msg):
     mesh_path = msg['data'].lstrip('package').lstrip('://')
     package = mesh_path.split('/')[0]
-    abs_package_path = get_package_share_directory(package)
-    rel_mesh_path = mesh_path.lstrip(package)
-    abs_mesh_path = abs_package_path + rel_mesh_path
 
-    with open(abs_mesh_path, 'rb') as f:
-        emit('mesh file', {'data': f.read()})
+    try:
+        abs_package_path = get_package_share_directory(package)
+        rel_mesh_path = mesh_path.lstrip(package)
+        abs_mesh_path = abs_package_path + rel_mesh_path
+
+        with open(abs_mesh_path, 'rb') as f:
+            emit('mesh file', {'data': f.read()})
+    except Exception as e:
+        print(str(e))
 
 if __name__ == '__main__':
     socketio.run(app)
