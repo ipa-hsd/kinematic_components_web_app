@@ -23,9 +23,10 @@
             {% for component in component_list %}
             <div class="ui segment">
                 <p class="ui big header">{{ component.name }} | {{ component.package }} | {{ component.category }}</p>
-
-                <a class="ui green button" href="/components/{{ component.category }}/{{ component.id }}">Details</a>
-                <a class="ui red button" href="/delete/{{ component.id }}">Delete</a>
+                <div class="btn-container">
+                    <a class="details-btn" href="/components/{{ component.category }}/{{ component.id }}">Details</a>
+                    <a class="delete-btn" href="/delete/{{ component.id }}">Delete</a>
+                </div>
             </div>
             {% endfor %}
         </div>

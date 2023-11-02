@@ -31,16 +31,16 @@
 
         <div id="component_dots">
             {% for image in image_files %}
-            <div>
+            <div class="image-container">
                 <img src={{ image }} alt="component tree"
                     class="center">
             </div>
             {% endfor %}
         </div>
 
-        <div id="urdf"></div>
+        <div id="urdf" class="urdf-container"></div>
 
-        <div class="ui segment">
+        <div class="table-container">
             <table>
                 <tr>
                     <td>Component</td>
