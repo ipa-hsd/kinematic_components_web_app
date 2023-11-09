@@ -28,18 +28,16 @@
 <body onload="init();">
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Component: {{ component.name }}</h1>
-
-        <div id="component_dots">
-            {% for image in image_files %}
-            <div class="image-container">
-                <img src={{ image }} alt="component tree"
-                    class="center">
+        <div class="division_class">
+            <div id="component_dots">
+                {% for image in image_files %}
+                <div class="image-container">
+                    <img src={{ image }} alt="component tree" class="center">
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            <div id="urdf" class="urdf-container"></div>
         </div>
-
-        <div id="urdf" class="urdf-container"></div>
-
         <div class="table-container">
             <table>
                 <tr>
