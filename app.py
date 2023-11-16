@@ -7,7 +7,7 @@ import json
 import os
 import uuid
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # /// = relative path, //// = absolute path
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -16,6 +16,11 @@ db = SQLAlchemy(app)
 
 socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True)
 
+class Node:
+    def __init__(self, name, attributes=None, children=None):
+        self.name = name
+        self.attributes = attributes or {}
+        self.children = children or []
 
 class Component(db.Model):
     id = db.Column(db.String, primary_key=True)
@@ -27,6 +32,18 @@ class Component(db.Model):
     version = db.Column(db.String(100))
     image_file = db.Column(db.String(500))
     model = db.Column(db.JSON())
+
+    def generate_tree_html(self):
+        # Assuming you have a tree represented by a Node object stored in self.model
+        root = dict_to_tree(self.model)
+        tree_html = f'<ul>{convert_node_to_html(root)}</ul>'
+        return tree_html
+
+    def generate_tree_html(self):
+        # Assuming you have a tree represented by a Node object stored in self.model
+        root = dict_to_tree(self.model)
+        tree_html = f'<ul>{convert_node_to_html(root)}</ul>'
+        return tree_html
 
 
 with app.app_context():
@@ -49,6 +66,29 @@ def home():
     component_list = get_components_all()
     return render_template("base.html", component_list=component_list)
 
+def convert_node_to_html(node):
+    html = f'<li>{node.name}'
+
+    if node.attributes:
+        html += '<ul>'
+        for key, value in node.attributes.items():
+            html += f'<li>{key}: {value}</li>'
+        html += '</ul>'
+
+    if node.children:
+        html += '<ul>'
+        for child in node.children:
+            html += convert_node_to_html(child)
+        html += '</ul>'
+
+    html += '</li>'
+    return html
+
+@app.route("/view_tree/<component_id>")
+def view_tree(component_id):
+    component = Component.query.get_or_404(component_id)
+    tree_html = component.generate_tree_html()
+    return render_template('view_tree.html', component=component, tree_html=tree_html)
 
 @app.route("/add", methods=["POST"])
 def add():
@@ -79,8 +119,11 @@ def add():
 
         image_files += '/' + image_path + ';'
 
+        json_trees.append(tree)
+    
     # model = json.loads(request.form["model"])
-
+    valid_json_string = str(json_trees).replace("'", "\"")
+    tree_html = f'<ul>{convert_node_to_html(root)}</ul>'
     component = Component(id=data['id'], name=data['name'],
                           category=data['category'],
                           repo=data['gitRepo']['repo'],
@@ -94,6 +137,7 @@ def add():
     db.session.commit()
     emit('add component', data, namespace='/test', broadcast=True)
     return redirect(url_for("home"))
+
 
 
 @app.get("/components/<string:component_cat>/<string:component_id>")

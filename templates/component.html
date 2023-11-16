@@ -14,7 +14,7 @@
     <script src="{{url_for('static', filename='js/three.js')}}"></script>
     <script src="{{url_for('static', filename='js/roslib.js')}}"></script>
     <script src="{{url_for('static', filename='js/ros3d.js')}}"></script>
-
+    <script src="{{ url_for('static', filename='js/style_script.js') }}"></script>
     
     <script src="{{url_for('static', filename='js/viewer.js')}}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
@@ -32,7 +32,7 @@
             <div id="component_dots">
                 {% for image in image_files %}
                 <div class="image-container">
-                    <img src={{ image }} alt="component tree" class="center">
+                    <img src={{ image }} alt="component tree" class="center" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
                 </div>
                 {% endfor %}
             </div>

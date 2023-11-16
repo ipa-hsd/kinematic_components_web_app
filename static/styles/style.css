@@ -103,11 +103,26 @@
 .image-container{
   flex: 1;
   min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
   text-align: center;
   .styled-image{
     max-width: 100%;
     height: auto;
   }
+}
+
+.image-container img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.image-container img:hover{
+  transform: scale(1.2);
 }
 
 .table-container{
