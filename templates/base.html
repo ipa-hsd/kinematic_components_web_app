@@ -19,6 +19,13 @@
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Kinematic components Catalog</h1>
 
+        <!-- Search bar -->
+        <div class="ui center aligned action input">
+            <input type="text" placeholder="Search..." id="searchInput">
+            <button class="ui button" onclick="searchComponents()">Search</button>
+            <button class="ui button" onclick="clearSearch()">Clear Search</button>
+        </div>
+
         <div id="component_add">
             {% for component in component_list %}
             <div class="ui segment">
@@ -31,6 +38,32 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        function searchComponents() {
+            var input = document.getElementById('searchInput').value.toLowerCase();
+            var components = document.querySelectorAll('.ui.segment');
+
+            components.forEach(function (component) {
+                var componentName = component.querySelector('.ui.big.header').textContent.toLowerCase();
+                if (componentName.includes(input)) {
+                    component.style.display = 'block';
+                } else {
+                    component.style.display = 'none';
+                }
+            });
+        }
+
+        function clearSearch(){
+            var input = document.getElementById('searchInput');
+            input.value = '';
+
+            var components = document.querySelectorAll('.ui.segment');
+            components.forEach(function (component){
+                component.style.display = 'block';
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -30,11 +30,12 @@
         <h1 class="ui center aligned header">Component: {{ component.name }}</h1>
         <div class="division_class">
             <div id="component_dots">
-                {% for image in image_files %}
                 <div class="image-container">
-                    <img src={{ image }} alt="component tree" class="center" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+                    <img src="data:image/png;base64,{{ image_file }}" alt="Tree Visualization">
                 </div>
-                {% endfor %}
+            </div>
+            <div id="tree-container">
+                {{ tree_html|safe }}
             </div>
             <div id="urdf" class="urdf-container"></div>
         </div>
