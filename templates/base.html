@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/static/styles/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-
+    <script type="text/javascript" src="{{url_for('static', filename='js/script.js')}}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script src="{{url_for('static', filename='js/socketio.js')}}"></script>
 </head>
@@ -19,12 +19,12 @@
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Kinematic components Catalog</h1>
 
-        <!-- Search bar -->
-        <div class="ui center aligned action input">
-            <input type="text" placeholder="Search..." id="searchInput">
-            <button class="ui button" onclick="searchComponents()">Search</button>
-            <button class="ui button" onclick="clearSearch()">Clear Search</button>
+        <div class="search_bar">
+        <div class="ui action input">
+            <input type="text" placeholder="Search components..." id="searchInput">
+            <button class="clear_search_button" onclick="clearSearch()">Clear Search</button>
         </div>
+    </div>
 
         <div id="component_add">
             {% for component in component_list %}
@@ -38,32 +38,6 @@
             {% endfor %}
         </div>
     </div>
-
-    <script>
-        function searchComponents() {
-            var input = document.getElementById('searchInput').value.toLowerCase();
-            var components = document.querySelectorAll('.ui.segment');
-
-            components.forEach(function (component) {
-                var componentName = component.querySelector('.ui.big.header').textContent.toLowerCase();
-                if (componentName.includes(input)) {
-                    component.style.display = 'block';
-                } else {
-                    component.style.display = 'none';
-                }
-            });
-        }
-
-        function clearSearch(){
-            var input = document.getElementById('searchInput');
-            input.value = '';
-
-            var components = document.querySelectorAll('.ui.segment');
-            components.forEach(function (component){
-                component.style.display = 'block';
-            });
-        }
-    </script>
 </body>
 
 </html>

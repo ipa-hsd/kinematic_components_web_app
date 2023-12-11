@@ -1,4 +1,42 @@
-.container{
+.search_bar{
+  position: center;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  justify-content: center;
+  margin: 30px;
+}
+
+.clear_search_button{
+  background-color: rgb(88, 88, 235); /* Initial button background color */
+  color: #fff; /* Initial font color */
+  box-sizing: border-box;
+  margin: 5px;
+  appearance: none;
+  border: 2px solid #fff;
+  border-radius: 0.6em;
+  cursor: pointer;
+  display: flex;
+  align-self: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  padding: 1.2em 2.8em;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.clear_search_button:hover {
+  background-color: #3226e6; /* Hovered button background color */
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+  color: #fff; /* Hovered font color */
+  box-shadow: 0 0 40px 40px #3226e6 inset;
+}
+
+ui.container{
     .h1{
     position: center;
     padding: 0;
@@ -31,7 +69,6 @@
 .btn-container a{
   margin-right: 10px;
 }
-
 
 .delete-btn {
   background-color: #fff; /* Initial button background color */
