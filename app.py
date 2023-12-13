@@ -122,7 +122,7 @@ def add():
                             package=data['gitRepo']['package'],
                             version=data['gitRepo']['version'],
                             model=data,
-                            json_trees=valid_json_string)
+                            json_trees=json_trees)
 
         db.session.add(component)
         db.session.commit()
