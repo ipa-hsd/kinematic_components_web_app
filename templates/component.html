@@ -30,17 +30,6 @@
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Component: {{ component.name }}</h1>
         <div class="division_class">
-            <!--
-            <div id="component_dots">
-                {% for image in image_files %}
-                <div class="image-container" style="background-image: url('{{image}}'); background-size: cover;" onmousemove="zoom(event)" ontouchmove="zoom(event)">
-                    
-                    <img src={{ image }} alt="component tree" class="center">
-                    
-                </div>
-                {% endfor %}
-            </div>
-            -->
             <div id="tree-container" class="tree_container">
                 {{ tree_html|safe }}
             </div>

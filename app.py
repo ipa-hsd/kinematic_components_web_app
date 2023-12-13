@@ -104,22 +104,7 @@ def add():
     else:
         robot_name = data['name']
 
-    image_files = ''
     for name, tree in dot_trees.items():
-        root = dict_to_tree(tree)
-
-        filepath = 'kinematic_components_web_app/static/images/' + data['gitRepo']['package']
-        if not filepath.endswith('/'):
-            filepath += '/'
-        filepath += robot_name + '/'
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
-
-        dot_file = tree_to_dot(root)
-        image_path = filepath + name + '.png'
-        dot_file.write_png(image_path)
-
-        image_files += '/' + image_path + ';'
-
         json_trees.append(tree)
     
     # model = json.loads(request.form["model"])
@@ -131,7 +116,6 @@ def add():
                           branch=data['gitRepo']['branch'],
                           package=data['gitRepo']['package'],
                           version=data['gitRepo']['version'],
-                          image_file=image_files,
                           model=data)
 
     db.session.add(component)
@@ -145,12 +129,11 @@ def components(component_cat, component_id):
     component = db.session.query(Component).filter(
         Component.id == component_id).first()
 
-    image_files = component.image_file.split(';')[:-1]
     json_trees = component.json_trees
     root_node = convert_json_to_tree(json_trees)
     tree_html = f'<ul>{convert_node_to_html(root_node)}</ul>'
 
-    return render_template("component.html", component=component, image_files=image_files,tree_data=json_trees, tree_html=tree_html)
+    return render_template("component.html", component=component, tree_data=json_trees, tree_html=tree_html)
 
 
 @app.get("/delete/<string:component_id>")
