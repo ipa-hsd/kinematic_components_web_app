@@ -121,7 +121,8 @@ def add():
                             branch=data['gitRepo']['branch'],
                             package=data['gitRepo']['package'],
                             version=data['gitRepo']['version'],
-                            model=data)
+                            model=data,
+                            json_trees=valid_json_string)
 
         db.session.add(component)
         db.session.commit()
