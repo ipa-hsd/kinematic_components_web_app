@@ -104,6 +104,8 @@ def add():
     else:
         robot_name = data['name']
 
+    json_trees = []
+    root = None
     for name, tree in dot_trees.items():
         json_trees.append(tree)
     
