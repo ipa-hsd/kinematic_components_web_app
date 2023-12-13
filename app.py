@@ -17,11 +17,13 @@ db = SQLAlchemy(app)
 
 socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True)
 
+
 class Node:
     def __init__(self, name, attributes=None, children=None):
         self.name = name
         self.attributes = attributes or {}
         self.children = children or []
+
 
 class Component(db.Model):
     id = db.Column(db.String, primary_key=True)
@@ -34,7 +36,6 @@ class Component(db.Model):
     image_file = db.Column(db.String(500))
     model = db.Column(db.JSON())
     json_trees = db.Column(db.JSON())
-
 
 
 with app.app_context():
@@ -69,6 +70,7 @@ def convert_node_to_html(node):
     html += '</li>'
     return html
 
+
 def convert_json_to_tree(json_data):
     root = Node("Root")  # Create a root node to hold all components
 
@@ -87,6 +89,7 @@ def convert_json_to_tree(json_data):
                 current_node = child
 
     return root
+
 
 @app.route("/add", methods=["POST"])
 def add():
@@ -135,7 +138,6 @@ def add():
     db.session.commit()
     emit('add component', data, namespace='/test', broadcast=True)
     return redirect(url_for("home"))
-
 
 
 @app.get("/components/<string:component_cat>/<string:component_id>")
@@ -187,6 +189,7 @@ def get_mesh_path(msg):
 
     with open(abs_mesh_path, 'rb') as f:
         emit('mesh file', {'data': f.read()})
+
 
 if __name__ == '__main__':
     socketio.run(app)
