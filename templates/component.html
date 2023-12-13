@@ -10,11 +10,12 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    
+    <link rel="stylesheet" href="/static/styles/style.css">
     <script src="{{url_for('static', filename='js/three.js')}}"></script>
     <script src="{{url_for('static', filename='js/roslib.js')}}"></script>
     <script src="{{url_for('static', filename='js/ros3d.js')}}"></script>
-
+    <script src="{{ url_for('static', filename='js/style_script.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/script.js')}}"></script>
     
     <script src="{{url_for('static', filename='js/viewer.js')}}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
@@ -28,19 +29,13 @@
 <body onload="init();">
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Component: {{ component.name }}</h1>
-
-        <div id="component_dots">
-            {% for image in image_files %}
-            <div>
-                <img src={{ image }} alt="component tree"
-                    class="center">
+        <div class="division_class">
+            <div id="tree-container" class="tree_container">
+                {{ tree_html|safe }}
             </div>
-            {% endfor %}
+            <div id="urdf" class="urdf-container"></div>
         </div>
-
-        <div id="urdf"></div>
-
-        <div class="ui segment">
+        <div class="table-container">
             <table>
                 <tr>
                     <td>Component</td>
