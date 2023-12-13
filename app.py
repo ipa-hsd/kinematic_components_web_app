@@ -107,22 +107,26 @@ def add():
     json_trees = []
     root = None
     for name, tree in dot_trees.items():
+        root = dict_to_tree(tree)
         json_trees.append(tree)
     
-    # model = json.loads(request.form["model"])
-    valid_json_string = str(json_trees).replace("'", "\"")
-    tree_html = f'<ul>{convert_node_to_html(root)}</ul>'
-    component = Component(id=data['id'], name=data['name'],
-                          category=data['category'],
-                          repo=data['gitRepo']['repo'],
-                          branch=data['gitRepo']['branch'],
-                          package=data['gitRepo']['package'],
-                          version=data['gitRepo']['version'],
-                          model=data)
+    if root:
+        # model = json.loads(request.form["model"])
+        # TODO: assuming that only tree exists in dot_trees
+        valid_json_string = str(json_trees).replace("'", "\"")
+        tree_html = f'<ul>{convert_node_to_html(root)}</ul>'
+        component = Component(id=data['id'], name=data['name'],
+                            category=data['category'],
+                            repo=data['gitRepo']['repo'],
+                            branch=data['gitRepo']['branch'],
+                            package=data['gitRepo']['package'],
+                            version=data['gitRepo']['version'],
+                            model=data)
 
-    db.session.add(component)
-    db.session.commit()
-    emit('add component', data, namespace='/test', broadcast=True)
+        db.session.add(component)
+        db.session.commit()
+        emit('add component', data, namespace='/test', broadcast=True)
+
     return redirect(url_for("home"))
 
 
