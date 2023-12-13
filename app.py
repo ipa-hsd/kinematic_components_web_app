@@ -6,11 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import os
 import uuid
-import networkx as nx
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from io import BytesIO
-import base64
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
@@ -73,59 +69,24 @@ def convert_node_to_html(node):
     html += '</li>'
     return html
 
-def dictionary_to_tree(path, attributes):
-    components = path.split('/')
-    root = Node(components[1], attributes={**attributes, "path": components[1]})
-    current_node = root
-
-    for component in components[2:]:
-        child = Node(component, attributes={"path": current_node.attributes["path"] + "/" + component})
-        current_node.children.append(child)
-        current_node = child
-
-    return root
-
 def convert_json_to_tree(json_data):
-    root = None
+    root = Node("Root")  # Create a root node to hold all components
 
-    for path, attributes in json_data[0].items():
-        root = dictionary_to_tree(path, attributes)
+    for tree_data in json_data:
+        for path, attributes in tree_data.items():
+            components = path.split('/')
+            current_node = root
+
+            for component in components[1:]:
+                child = next((child for child in current_node.children if child.name == component), None)
+
+                if not child:
+                    child = Node(component)
+                    current_node.children.append(child)
+
+                current_node = child
 
     return root
-
-def convert_node_to_graph(node, graph=None, parent_name=None, pos=None, level=0, width=2., vert_gap=0.4, xcenter=0.5):
-    if graph is None:
-        graph = nx.DiGraph()
-    if pos is None:
-        pos = {node.name: (xcenter, 1 - level * vert_gap)}
-    else:
-        pos[node.name] = (xcenter, 1 - level * vert_gap)
-    neighbors = list(graph.neighbors(parent_name)) + [parent_name] if parent_name is not None else []
-    if parent_name is not None:
-        neighbors.remove(node.name)
-    if len(neighbors) != 0:
-        dx = width / 2
-        nextx = xcenter - width / 2 - dx / 2
-        for neighbor in neighbors:
-            nextx += dx
-            pos = convert_node_to_graph(node, graph=graph, parent_name=neighbor, pos=pos, level=level + 1,
-                                        width=dx, xcenter=nextx)
-    return pos
-
-def visualize_tree(node):
-    graph = nx.DiGraph()
-    pos = convert_node_to_graph(node, graph=graph)
-    fig, ax = plt.subplots()
-    nx.draw(graph, pos=pos, with_labels=True, arrows=False, node_size=700, font_size=8, font_color='white',
-            node_color='skyblue')
-    canvas = FigureCanvas(fig)
-    '''plt.savefig(img_data, format="png", bbox_inches = 'tight', pad_inches = 0.1)'''
-    img_data = BytesIO()
-    canvas.print_png(img_data)
-    '''img_data.seek(0)'''
-    plt.close(fig)
-    img_data_base64 = base64.b64encode(img_data.read()).decode('utf-8')
-    return img_data_base64
 
 @app.route("/add", methods=["POST"])
 def add():
@@ -185,10 +146,9 @@ def components(component_cat, component_id):
     image_files = component.image_file.split(';')[:-1]
     json_trees = component.json_trees
     root_node = convert_json_to_tree(json_trees)
-    image_file = visualize_tree(root_node)
     tree_html = f'<ul>{convert_node_to_html(root_node)}</ul>'
 
-    return render_template("component.html", component=component, image_file=image_file,tree_data=json_trees, tree_html=tree_html)
+    return render_template("component.html", component=component, image_files=image_files,tree_data=json_trees, tree_html=tree_html)
 
 
 @app.get("/delete/<string:component_id>")

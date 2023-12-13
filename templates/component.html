@@ -15,6 +15,7 @@
     <script src="{{url_for('static', filename='js/roslib.js')}}"></script>
     <script src="{{url_for('static', filename='js/ros3d.js')}}"></script>
     <script src="{{ url_for('static', filename='js/style_script.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/script.js')}}"></script>
     
     <script src="{{url_for('static', filename='js/viewer.js')}}"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
@@ -29,12 +30,18 @@
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Component: {{ component.name }}</h1>
         <div class="division_class">
+            <!--
             <div id="component_dots">
-                <div class="image-container">
-                    <img src="data:image/png;base64,{{ image_file }}" alt="Tree Visualization">
+                {% for image in image_files %}
+                <div class="image-container" style="background-image: url('{{image}}'); background-size: cover;" onmousemove="zoom(event)" ontouchmove="zoom(event)">
+                    
+                    <img src={{ image }} alt="component tree" class="center">
+                    
                 </div>
+                {% endfor %}
             </div>
-            <div id="tree-container">
+            -->
+            <div id="tree-container" class="tree_container">
                 {{ tree_html|safe }}
             </div>
             <div id="urdf" class="urdf-container"></div>
