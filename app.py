@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 import os
 import uuid
-import matplotlib.pyplot as plt
+
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
