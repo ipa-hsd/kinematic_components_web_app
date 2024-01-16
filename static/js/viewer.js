@@ -13,7 +13,6 @@ function init() {
 }
 
 function addMesh(filename, repoPath, origin) {
-    // console.log(filename);
     const colorMaterial = ROS3D.makeColorMaterial(255, 0, 0, 1);
     var mesh = new ROS3D.MeshResource({
         path: repoPath,
@@ -63,8 +62,6 @@ function getThreePose(origin) {
 }
 
 function updatePose(obj, pose) {
-    // console.log('updating pose');
-    // console.log(pose);
     obj.position.set(pose.position.x, pose.position.y, pose.position.z);
     obj.quaternion.set(pose.orientation.x, pose.orientation.y,
         pose.orientation.z, pose.orientation.w);
@@ -80,8 +77,8 @@ function getLink(links, linkName) {
     return undefined
 }
 
-function viewComponent(model, repo, branch, version, package, package_path) {
-    let ws_path = '/static/moveit2_ws/install/'
+function viewComponent(model, package_path) {
+    let ws_path =  '/'
 
     let parent = undefined;
     let joint = model.joint[0]
@@ -106,7 +103,7 @@ function viewComponent(model, repo, branch, version, package, package_path) {
         });
 
         // remove 'package://', 'filepath://', etc
-        meshPath = package + '/share/' + parent_link.visual.geometry.mesh.filename.replace('package://', '')
+        meshPath = package_path + parent_link.visual.geometry.mesh.filename.replace('package://', '')
         parent = addMesh(meshPath, ws_path, origin);
         let axes = new ROS3D.Axes({});
         parent.add(axes);
@@ -118,11 +115,11 @@ function viewComponent(model, repo, branch, version, package, package_path) {
         let axes = new ROS3D.Axes({});
         childLink = getLink(model.link, joint.child.link)
         if (childLink.visual !== undefined) {
-            meshPath = package + '/share/' + childLink.visual.geometry.mesh.filename.replace('package://', '')
+            meshPath = package_path + childLink.visual.geometry.mesh.filename.replace('package://', '')
             mesh = addMesh(meshPath, ws_path, getThreePose(joint.origin));
             mesh.add(axes);
             if (childLink.visual.geometry.mesh.scale !== undefined) {
-                mesh.scale.set(childLink.visual.geometry.mesh.scale);
+                mesh.scale.set(...childLink.visual.geometry.mesh.scale);
             }
             parent.add(mesh);
             parent = mesh;

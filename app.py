@@ -163,10 +163,14 @@ def handle_message(msg):
     component = db.session.query(Component).filter(
         Component.id == component_id).first()
 
-    package_path = get_package_share_directory(component.package)
+    try:
+        package_path = get_package_share_directory(component.package)
+        package_path = package_path.replace('/app/kinematic_components_web_app/', '')
+        package_path = package_path.rstrip(component.package)
 
-    emit('viz model', [component.model, component.repo, component.branch, component.version, component.package, package_path,
-         component_id], namespace='/viz', broadcast=True)
+        emit('viz model', [component.model, package_path], namespace='/viz', broadcast=True)
+    except Exception as ex:
+        print(repr(ex))
 
 
 @socketio.on('get mesh', namespace='/component_view')
