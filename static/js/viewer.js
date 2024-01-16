@@ -107,6 +107,9 @@ function viewComponent(model, package_path) {
         parent = addMesh(meshPath, ws_path, origin);
         let axes = new ROS3D.Axes({});
         parent.add(axes);
+        if (parent_link.visual.geometry.mesh.scale !== undefined) {
+            parent.scale.set(...parent_link.visual.geometry.mesh.scale);
+        }
         viewer.addObject(parent);
     }
 
