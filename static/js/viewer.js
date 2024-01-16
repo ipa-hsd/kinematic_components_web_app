@@ -13,7 +13,6 @@ function init() {
 }
 
 function addMesh(filename, repoPath, origin) {
-    // console.log(filename);
     const colorMaterial = ROS3D.makeColorMaterial(255, 0, 0, 1);
     var mesh = new ROS3D.MeshResource({
         path: repoPath,
@@ -63,8 +62,6 @@ function getThreePose(origin) {
 }
 
 function updatePose(obj, pose) {
-    // console.log('updating pose');
-    // console.log(pose);
     obj.position.set(pose.position.x, pose.position.y, pose.position.z);
     obj.quaternion.set(pose.orientation.x, pose.orientation.y,
         pose.orientation.z, pose.orientation.w);
