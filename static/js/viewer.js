@@ -119,7 +119,7 @@ function viewComponent(model, repo, branch, version, package, package_path) {
             mesh = addMesh(meshPath, ws_path, getThreePose(joint.origin));
             mesh.add(axes);
             if (childLink.visual.geometry.mesh.scale !== undefined) {
-                mesh.scale.set(childLink.visual.geometry.mesh.scale);
+                mesh.scale.set(...childLink.visual.geometry.mesh.scale);
             }
             parent.add(mesh);
             parent = mesh;
